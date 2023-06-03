@@ -37,7 +37,7 @@ public class CompanyEntity {
   // Constructors, getters, and setters
   public CompanyEntity() {}
 
-  public CompanyEntity(String company_code, String phantasy_name, String postal_code) {
+  public CompanyEntity(Integer company_code, String phantasy_name, String postal_code) {
     this.company_code = company_code;
     this.phantasy_name = phantasy_name;
     this.postal_code = postal_code;

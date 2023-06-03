@@ -32,7 +32,7 @@ public class SupplyEntity {
   // Constructors, getters, and setters
   public SupplyEntity() {}
 
-  public SupplyEntity(String supplier_code, String email, String name, String postal_code) {
+  public SupplyEntity(Integer supplier_code, String email, String name, String postal_code) {
     this.supplier_code = supplier_code;
     this.email = email;
     this.name = name;
