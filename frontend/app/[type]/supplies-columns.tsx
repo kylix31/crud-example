@@ -1,6 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import axios from "axios"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { funcCreateCustomEvent } from "@/components/helpers/function-custom-events"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -88,7 +90,15 @@ export const suppliesColumns: ColumnDef<Supply>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+      const supplier = row.original
+
+      const handleDelete = () => {
+        axios
+          .delete(`http://localhost:8080/supplies/${supplier.id}`)
+          .catch((err) => console.error(err))
+
+        funcCreateCustomEvent("delete", { id: supplier.id })
+      }
 
       return (
         <DropdownMenu>
@@ -101,13 +111,15 @@ export const suppliesColumns: ColumnDef<Supply>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(supplier.name)}
             >
-              Copy payment ID
+              Copy supplier name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>
+              Delete supplier
+            </DropdownMenuItem>
+            <DropdownMenuItem>Add company</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

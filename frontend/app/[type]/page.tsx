@@ -22,8 +22,6 @@ async function getData(type: Type): Promise<Supply[] | Company[]> {
     throw new Error("Failed to fetch data")
   }
 
-  console.log(res, `http://localhost:8080/${type}`)
-
   return res.json()
 }
 

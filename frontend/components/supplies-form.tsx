@@ -21,6 +21,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import validateCPFCNPJ from "@/components/helpers/validates"
 
+import { funcCreateCustomEvent } from "./helpers/function-custom-events"
 import { useCustomEvent } from "./hooks/event-listener"
 
 const supplierCodeSchema = z.string().refine((value) => {
@@ -48,8 +49,6 @@ export default function SupplierForm() {
     },
   })
   const { toast } = useToast()
-
-  const dispatchCustomEvent = useCustomEvent("toggleSheet", {})
 
   const ref = React.useRef<z.infer<typeof formSchema>>(null!)
 
@@ -96,7 +95,12 @@ export default function SupplierForm() {
     // ✅ This will be type-safe and validated.
     console.log(values)
 
-    dispatchCustomEvent()
+    axios
+      .post("http://localhost:8080/supplies", values)
+      .catch((err) => console.error(err))
+
+    funcCreateCustomEvent("optimisticUiTrigger", { values })
+    funcCreateCustomEvent("toggleSheet", {})
   }
 
   const supplierCodehandleChange = (

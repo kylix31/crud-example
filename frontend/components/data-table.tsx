@@ -69,9 +69,37 @@ export function DataTable({
     `http://localhost:8080/${fetch}`,
     fetcher
   )
+  const {
+    data: relationData,
+    mutate: relationMutate,
+    isLoading: relationIsLoading,
+  } = useSWR(
+    `http://localhost:8080/${fetch === "supplies" ? "companies" : "supplies"}`,
+    fetcher
+  )
 
   useCustomEventTrigger("toggleSheet", () => {
     setShouldOpenSheet((prev) => !prev)
+  })
+
+  useCustomEventTrigger("optimisticUiTrigger", (event) => {
+    mutate([...data, event.values], {
+      optimisticData: [...data, event],
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    }).catch((e) => console.error(e))
+  })
+
+  useCustomEventTrigger("delete", (event) => {
+    const filterdData = data.filter((d: any) => d.id !== event.id)
+
+    mutate(filterdData, {
+      optimisticData: filterdData,
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    }).catch((e) => console.error(e))
   })
 
   const table = useReactTable({
@@ -216,6 +244,20 @@ export function DataTable({
       <Sheet
         open={shouldOpenSheet}
         onOpenChange={(bool) => setShouldOpenSheet(bool)}
+      >
+        <SheetContent position="right" size="content">
+          <SheetHeader>
+            <SheetTitle>Add supplier</SheetTitle>
+            <SheetDescription>
+              Add a new supplier. Click on submit to save.
+            </SheetDescription>
+          </SheetHeader>
+          <SupplierForm />
+        </SheetContent>
+      </Sheet>
+      <Sheet
+      // open={shouldOpenSheet}
+      // onOpenChange={(bool) => setShouldOpenSheet(bool)}
       >
         <SheetContent position="right" size="content">
           <SheetHeader>

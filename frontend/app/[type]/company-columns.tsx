@@ -83,7 +83,7 @@ export const companyColumns: ColumnDef<Company>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+      const selectedRow = row.original
 
       return (
         <DropdownMenu>
@@ -96,12 +96,12 @@ export const companyColumns: ColumnDef<Company>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(selectedRow.id)}
             >
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>Delete customer</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
