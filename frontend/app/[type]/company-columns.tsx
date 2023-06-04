@@ -102,8 +102,8 @@ export function companyColumns(
           axios
             .delete(
               isRelatedSection
-                ? `${backendPath}/companies/${currentRow.id}/supplies/${id}`
-                : `${backendPath}/companies/${currentRow.id}`
+                ? `${backendPath()}/companies/${currentRow.id}/supplies/${id}`
+                : `${backendPath()}/companies/${currentRow.id}`
             )
             .catch((err) => console.error(err))
 

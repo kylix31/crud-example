@@ -91,7 +91,7 @@ export default function SupplierForm() {
       return
     }
 
-    axios.post(`${backendPath()}/supplies`, values).catch((_) =>
+    await axios.post(`${backendPath()}/supplies`, values).catch((_) =>
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
