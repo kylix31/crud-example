@@ -110,6 +110,23 @@ export function companyColumns(
           funcCreateCustomEvent("delete", { id: currentRow.id })
         }
 
+        const handleUpdate = () => {
+          axios
+            .put(
+              isRelatedSection
+                ? `${backendPath()}/supplies/${currentRow.id}`
+                : `${backendPath()}/companies/${currentRow.id}`
+            )
+            .catch((err) => console.error(err))
+
+          funcCreateCustomEvent("update", {
+            id: currentRow.id,
+            CompanyCode: currentRow.companyCode,
+            phantasyName: currentRow.phantasyName,
+            postalCode: currentRow.postalCode,
+          })
+        }
+
         const handleAddRelated = () =>
           funcCreateCustomEvent("related", { id: currentRow.id })
 
@@ -138,6 +155,9 @@ export function companyColumns(
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={handleUpdate}>
+                    Update company
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleDelete}>
                     Delete company
                   </DropdownMenuItem>

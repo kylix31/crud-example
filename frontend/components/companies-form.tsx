@@ -24,6 +24,8 @@ import { backendPath } from "./helpers/database-path"
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
 import validateCPFCNPJ from "./helpers/validates"
 
+type UpdataDataProps = Record<string, any>
+
 const companyCodeSchema = z.string().refine((value) => {
   if (value.length < 14) {
     return false
@@ -40,14 +42,14 @@ const formSchema = z.object({
   postalCode: z.string().min(9).max(9),
 })
 
-export default function CompanyForm() {
+export default function CompanyForm({ updateData }: UpdataDataProps) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyCode: "",
-      phantasyName: "",
-      postalCode: "",
+      companyCode: updateData.companyCode ?? "",
+      phantasyName: updateData.phantasyName ?? "",
+      postalCode: updateData.postalCode ?? "",
     },
   })
   const { toast } = useToast()
@@ -93,13 +95,25 @@ export default function CompanyForm() {
       return
     }
 
-    await axios.post(`${backendPath()}/companies`, values).catch((_) =>
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-      })
-    )
+    if (updateData && updateData.id) {
+      await axios
+        .put(`${backendPath()}/companies/${updateData.id}`, values)
+        .catch((_) =>
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          })
+        )
+    } else {
+      await axios.post(`${backendPath()}/companies`, values).catch((_) =>
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        })
+      )
+    }
 
     funcCreateCustomEvent("optimisticUiTrigger", { values })
     funcCreateCustomEvent("toggleSheet", {})

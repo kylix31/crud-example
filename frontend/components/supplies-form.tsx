@@ -24,6 +24,8 @@ import validateCPFCNPJ from "@/components/helpers/validates"
 import { backendPath } from "./helpers/database-path"
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
 
+type UpdataDataProps = Record<string, any>
+
 const supplierCodeSchema = z.string().refine((value) => {
   const isValid = validateCPFCNPJ(value)
 
@@ -37,15 +39,15 @@ const formSchema = z.object({
   postalCode: z.string().min(9).max(9),
 })
 
-export default function SupplierForm() {
+export default function SupplierForm({ updateData }: UpdataDataProps) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      supplierCode: "",
-      email: "",
-      postalCode: "",
+      name: updateData.name ?? "",
+      supplierCode: updateData.supplierCode ?? "",
+      email: updateData.email ?? "",
+      postalCode: updateData.postalCode ?? "",
     },
   })
   const { toast } = useToast()
@@ -91,13 +93,25 @@ export default function SupplierForm() {
       return
     }
 
-    await axios.post(`${backendPath()}/supplies`, values).catch((_) =>
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-      })
-    )
+    if (updateData && updateData.id) {
+      await axios
+        .put(`${backendPath()}/supplies/${updateData.id}`, values)
+        .catch((_) =>
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          })
+        )
+    } else {
+      await axios.post(`${backendPath()}/supplies`, values).catch((_) =>
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        })
+      )
+    }
 
     funcCreateCustomEvent("optimisticUiTrigger", { values })
     funcCreateCustomEvent("toggleSheet", {})

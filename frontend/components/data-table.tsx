@@ -67,6 +67,7 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
   const [shouldOpenSheet, setShouldOpenSheet] = React.useState(false)
   const [shouldOpenRelated, setShouldOpenRelated] = React.useState(false)
   const [currentDataId, setCurrentDataId] = React.useState(0)
+  const [updateData, setUpdateData] = React.useState({})
 
   const isCompany = useIsCompany()
   const params = useParams()
@@ -109,6 +110,11 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
   useCustomEventTrigger("related", (event) => {
     setShouldOpenRelated(true)
     setCurrentDataId(event.id)
+  })
+
+  useCustomEventTrigger("update", (event) => {
+    setShouldOpenSheet(true)
+    setUpdateData({ ...event })
   })
 
   useCustomEventTrigger("toggleSheetRelated", () => {
@@ -295,7 +301,11 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
               to save.
             </SheetDescription>
           </SheetHeader>
-          {isCompany ? <CompanyForm /> : <SupplierForm />}
+          {isCompany ? (
+            <CompanyForm updateData={updateData} />
+          ) : (
+            <SupplierForm updateData={updateData} />
+          )}
         </SheetContent>
       </Sheet>
       <Sheet

@@ -1,36 +1,36 @@
 version: "3.7"
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        ENV_VARIABLE: ${ENV_VARIABLE}
-        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
-    restart: always
-    depends_on:
-      - backend
-    ports:
-      - 3000:3000
-    environment:
-      - NEXT_PUBLIC_API_BASE=http://backend:8080
-      - API_BASE=http://backend:8080
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #     args:
+  #       ENV_VARIABLE: ${ENV_VARIABLE}
+  #       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+  #   restart: always
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - NEXT_PUBLIC_API_BASE=http://backend:8080
+  #     - API_BASE=http://backend:8080
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - mysql
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/server_db
-      SPRING_DATASOURCE_USERNAME: server
-      SPRING_DATASOURCE_PASSWORD: server
-    restart: on-failure
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./backend:/app
+  #   depends_on:
+  #     - mysql
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/server_db
+  #     SPRING_DATASOURCE_USERNAME: server
+  #     SPRING_DATASOURCE_PASSWORD: server
+  #   restart: on-failure
 
   mysql:
     image: mysql:latest

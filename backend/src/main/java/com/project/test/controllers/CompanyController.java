@@ -4,7 +4,13 @@ import com.project.test.entities.CompanyEntity;
 import com.project.test.entities.SupplyEntity;
 import com.project.test.services.CompanyService;
 import com.project.test.services.SupplyService;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +46,42 @@ public class CompanyController {
 
   @PostMapping
   public ResponseEntity<CompanyEntity> createCompany(@RequestBody CompanyEntity company) {
-    CompanyEntity createdCompany = companyService.createCompany(company);
-    return ResponseEntity.ok(createdCompany);
+
+    String postalCode = company.getPostalCode();
+    postalCode = postalCode.replaceAll("\\D", "");
+
+    try {
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request =
+          HttpRequest.newBuilder()
+              .uri(URI.create("http://cep.la/" + postalCode))
+              .header("Accept", "application/json")
+              .build();
+
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+      if (response.statusCode() == 200) {
+        String responseBody = response.body();
+
+        System.out.println(responseBody.isEmpty());
+        if (responseBody != null && !responseBody.equals("[]")) {
+
+          CompanyEntity createdCompany = companyService.createCompany(company);
+          return ResponseEntity.ok(createdCompany);
+        } else {
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+      } else if (response.statusCode() >= 400 && response.statusCode() < 500) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      } else {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      }
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 
   @PutMapping("/{id}")

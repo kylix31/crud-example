@@ -116,6 +116,24 @@ export function suppliesColumns(
           funcCreateCustomEvent("delete", { id: currentRow.id })
         }
 
+        const handleUpdate = () => {
+          axios
+            .put(
+              isRelatedSection
+                ? `${backendPath()}/companies/${currentRow.id}`
+                : `${backendPath()}/supplies/${currentRow.id}`
+            )
+            .catch((err) => console.error(err))
+
+          funcCreateCustomEvent("update", {
+            id: currentRow.id,
+            name: currentRow.name,
+            email: currentRow.email,
+            supplierCode: currentRow.supplierCode,
+            postalCode: currentRow.postalCode,
+          })
+        }
+
         const handleAddRelated = () =>
           funcCreateCustomEvent("related", { id: currentRow.id })
 
@@ -144,6 +162,9 @@ export function suppliesColumns(
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={handleUpdate}>
+                    Update supplier
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleDelete}>
                     Delete supplier
                   </DropdownMenuItem>

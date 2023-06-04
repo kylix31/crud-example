@@ -2,8 +2,8 @@ import { Skeleton } from "./ui/skeleton"
 
 export default function LoadingSkeleton() {
   const count = 8
-  const arr = Array.from({ length: count }, () => (
-    <Skeleton className="h-[20px] w-full rounded-full" />
+  const arr = Array.from({ length: count }, (_, i) => (
+    <Skeleton key={i} className="h-[20px] w-full rounded-full" />
   ))
 
   return (
