@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import { useForm } from "react-hook-form"
@@ -29,12 +28,12 @@ import { Company } from "@/app/[type]/company-columns"
 import { Supply } from "@/app/[type]/supplies-columns"
 
 import { funcTriggerCustomEvent } from "./helpers/function-custom-events"
+import { useIsCompany } from "./hooks/use-is-company"
 
 interface SelectRelationProps<T extends Company[] | Supply[]> {
   relationData: T
   dataId: number
   isLoading: boolean
-  type: "supplies" | "companies"
 }
 
 const FormSchema = z.object({
@@ -47,11 +46,12 @@ export default function SelectRelation<T extends Company[] | Supply[]>({
   relationData,
   isLoading,
   dataId,
-  type,
 }: SelectRelationProps<T>) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
+
+  const isCompany = useIsCompany()
 
   const { toast } = useToast()
 
@@ -59,8 +59,6 @@ export default function SelectRelation<T extends Company[] | Supply[]>({
     typeof data === "object" && "phantasyName" in data
 
   const onSubmit = (value: z.infer<typeof FormSchema>) => {
-    const isCompany = type === "companies"
-
     axios
       .post(
         `http://localhost:8080/companies/${

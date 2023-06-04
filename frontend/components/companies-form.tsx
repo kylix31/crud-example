@@ -92,7 +92,7 @@ export default function CompanyForm() {
       return
     }
 
-    axios.post("http://localhost:8080/companies", values).catch((_) =>
+    await axios.post("http://localhost:8080/companies", values).catch((_) =>
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

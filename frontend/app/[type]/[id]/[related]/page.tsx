@@ -1,17 +1,21 @@
 import { DataTable } from "@/components/data-table"
 import { WithSWR } from "@/components/with-swr"
 
-import { Company, companyColumns } from "./company-columns"
-import { Supply, suppliesColumns } from "./supplies-columns"
+import { Company, companyColumns } from "../../company-columns"
+import { Supply, suppliesColumns } from "../../supplies-columns"
 
 type Type = "companies" | "supplies"
 
 interface DemoPageProps {
-  params: { type: Type }
+  params: { type: Type; id: number; related: Type }
 }
 
-async function getData(type: Type): Promise<Supply[] | Company[]> {
-  const res = await fetch(`http://localhost:8080/${type}`, {
+async function getData(
+  type: Type,
+  id: number,
+  related: Type
+): Promise<Supply[] | Company[]> {
+  const res = await fetch(`http://localhost:8080/${type}/${id}/${related}`, {
     next: { revalidate: 0 },
   })
 
@@ -23,8 +27,10 @@ async function getData(type: Type): Promise<Supply[] | Company[]> {
   return res.json()
 }
 
-export default async function DemoPage({ params: { type } }: DemoPageProps) {
-  const data = await getData(type)
+export default async function DemoPage({
+  params: { type, id, related },
+}: DemoPageProps) {
+  const data = await getData(type, id, related)
 
   const isSupplies = type === "supplies"
 

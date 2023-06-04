@@ -1,7 +1,9 @@
 "use client"
 
 import * as React from "react"
+import { useParams, useSearchParams } from "next/navigation"
 import {
+  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -39,25 +41,21 @@ import {
 } from "@/components/ui/table"
 import { fetcher } from "@/components/helpers/fetcher"
 import LoadingSkeleton from "@/components/loading-sekeleton"
+import { companyColumns } from "@/app/[type]/company-columns"
+import { Supply, suppliesColumns } from "@/app/[type]/supplies-columns"
 
 import CompanyForm from "./companies-form"
 import { useCustomEventTrigger } from "./hooks/event-listener"
+import { useIsCompany } from "./hooks/use-is-company"
 import SelectRelation from "./select-relation"
 import SupplierForm from "./supplies-form"
 
 interface DataTableProps {
-  columns: any
   filterName: string
-  fetch: "supplies" | "companies"
   filterBy: string
 }
 
-export function DataTable({
-  columns,
-  filterName,
-  fetch,
-  filterBy,
-}: DataTableProps) {
+export function DataTable({ filterName, filterBy }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -69,16 +67,41 @@ export function DataTable({
   const [shouldOpenRelated, setShouldOpenRelated] = React.useState(false)
   const [currentDataId, setCurrentDataId] = React.useState(0)
 
+  const isCompany = useIsCompany()
+  const params = useParams()
+  const searchParams = useSearchParams()
+  const currentParamsName = React.useMemo(
+    () => searchParams.get("name"),
+    [searchParams]
+  )
+  const columns = React.useMemo(() => {
+    if (params.related && params.type === "companies") {
+      return suppliesColumns(params?.id, params?.type, params?.related)
+    }
+
+    if (params.related && params.type === "supplies") {
+      return companyColumns(params?.id, params?.type, params?.related)
+    }
+
+    if (params.type === "companies") {
+      return companyColumns(params?.id, params?.type, params?.related)
+    }
+
+    return suppliesColumns(params?.id, params?.type, params?.related)
+  }, [params?.id, params.related, params.type])
+
   const { data, mutate, isLoading } = useSWR(
-    `http://localhost:8080/${fetch}`,
+    params.related
+      ? `http://localhost:8080/${params.type}/${params.id}/${params.related}`
+      : `http://localhost:8080/${params.type}`,
     fetcher
   )
   const {
     data: relationData,
-    mutate: relationMutate,
+    // mutate: relationMutate,
     isLoading: relationIsLoading,
   } = useSWR(
-    `http://localhost:8080/${fetch === "supplies" ? "companies" : "supplies"}`,
+    `http://localhost:8080/${isCompany ? "supplies" : "companies"}`,
     fetcher
   )
 
@@ -97,10 +120,10 @@ export function DataTable({
 
   useCustomEventTrigger("optimisticUiTrigger", (event) => {
     mutate([...data, event.values], {
-      optimisticData: [...data, event],
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
+      // optimisticData: [...data, event],
+      // rollbackOnError: true,
+      // populateCache: true,
+      // revalidate: false,
     }).catch((e) => console.error(e))
   })
 
@@ -117,7 +140,7 @@ export function DataTable({
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns as ColumnDef<Supply, unknown>[],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -140,6 +163,9 @@ export function DataTable({
 
   return (
     <div>
+      {params.related && (
+        <h1 className="text-xl font-bold uppercase">{`${currentParamsName} ${params.type} related to ${params.related}`}</h1>
+      )}
       <div className="flex items-center py-4">
         <Input
           placeholder={filterName}
@@ -227,13 +253,15 @@ export function DataTable({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="default"
-          size="sm"
-          onClick={() => setShouldOpenSheet(true)}
-        >
-          Add
-        </Button>
+        {!params.related && (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setShouldOpenSheet(true)}
+          >
+            Add
+          </Button>
+        )}
 
         <div className="flex-1" />
 
@@ -260,15 +288,13 @@ export function DataTable({
       >
         <SheetContent position="right" size="content">
           <SheetHeader>
-            <SheetTitle>
-              Add {fetch === "supplies" ? "supply" : "company"}
-            </SheetTitle>
+            <SheetTitle>Add {isCompany ? "company" : "supplier"}</SheetTitle>
             <SheetDescription>
-              Add a new {fetch === "supplies" ? "supplier" : "company"} . Click
-              on submit to save.
+              Add a new {isCompany ? "company" : "supplier"} . Click on submit
+              to save.
             </SheetDescription>
           </SheetHeader>
-          {fetch === "supplies" ? <SupplierForm /> : <CompanyForm />}
+          {isCompany ? <CompanyForm /> : <SupplierForm />}
         </SheetContent>
       </Sheet>
       <Sheet
@@ -286,7 +312,6 @@ export function DataTable({
             dataId={currentDataId}
             relationData={relationData}
             isLoading={relationIsLoading}
-            type={fetch}
           />
         </SheetContent>
       </Sheet>

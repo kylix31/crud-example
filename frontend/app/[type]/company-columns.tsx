@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 import axios from "axios"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
@@ -25,104 +26,232 @@ export type Company = {
   postalCode: string
 }
 
-export const companyColumns: ColumnDef<Company>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "companyCode",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="p-0"
-        >
-          CompanyCode
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
+export function companyColumns(
+  id?: string,
+  type?: string,
+  related?: string
+): ColumnDef<Company>[] {
+  const isRelatedSection = Boolean(related && type && id)
+
+  return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
     },
-  },
-  {
-    accessorKey: "phantasyName",
-    header: "PhantasyName",
-    // header: () => <div className="text-right">PhantasyName</div>,
-    // cell: ({ row }) => {
-    //   const amount = parseFloat(row.getValue("amount"))
-    //   const formatted = new Intl.NumberFormat("en-US", {
-    //     style: "currency",
-    //     currency: "USD",
-    //   }).format(amount)
-    //
-    //   return <div className="text-right font-medium">{formatted}</div>
-    // },
-  },
-  {
-    accessorKey: "postalCode",
-    header: "PostalCode",
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const company = row.original
-
-      const handleDelete = () => {
-        axios
-          .delete(`http://localhost:8080/companies/${company.id}`)
-          .catch((err) => console.error(err))
-
-        funcCreateCustomEvent("delete", { id: company.id })
-      }
-
-      const handleAddRelated = () =>
-        funcCreateCustomEvent("related", { id: company.id })
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(company.id)}
-            >
-              Copy company ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleDelete}>
-              Delete company
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleAddRelated}>
-              Add supplier
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+    {
+      accessorKey: "id",
+      header: "ID",
     },
-  },
-]
+    {
+      accessorKey: "companyCode",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="p-0"
+          >
+            CompanyCode
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+    },
+    {
+      accessorKey: "phantasyName",
+      header: "PhantasyName",
+      // header: () => <div className="text-right">PhantasyName</div>,
+      // cell: ({ row }) => {
+      //   const amount = parseFloat(row.getValue("amount"))
+      //   const formatted = new Intl.NumberFormat("en-US", {
+      //     style: "currency",
+      //     currency: "USD",
+      //   }).format(amount)
+      //
+      //   return <div className="text-right font-medium">{formatted}</div>
+      // },
+    },
+    {
+      accessorKey: "postalCode",
+      header: "PostalCode",
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const currentRow = row.original
+
+        const handleDelete = () => {
+          axios
+            .delete(
+              isRelatedSection
+                ? `http://localhost:8080/companies/${currentRow.id}/supplies/${id}`
+                : `http://localhost:8080/companies/${currentRow.id}`
+            )
+            .catch((err) => console.error(err))
+
+          funcCreateCustomEvent("delete", { id: currentRow.id })
+        }
+
+        const handleAddRelated = () =>
+          funcCreateCustomEvent("related", { id: currentRow.id })
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {isRelatedSection ? (
+                <DropdownMenuItem onClick={handleDelete}>
+                  Delete company
+                </DropdownMenuItem>
+              ) : (
+                <>
+                  <DropdownMenuLabel>Relations</DropdownMenuLabel>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/companies/${currentRow.id}/supplies?name=${currentRow.phantasyName}`}
+                    >
+                      See all related suppliers
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={handleDelete}>
+                    Delete company
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleAddRelated}>
+                    Add supplier
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+}
+
+// export const companyColumns: ColumnDef<Company>[] = [
+//   {
+//     id: "select",
+//     header: ({ table }) => (
+//       <Checkbox
+//         checked={table.getIsAllPageRowsSelected()}
+//         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+//         aria-label="Select all"
+//       />
+//     ),
+//     cell: ({ row }) => (
+//       <Checkbox
+//         checked={row.getIsSelected()}
+//         onCheckedChange={(value) => row.toggleSelected(!!value)}
+//         aria-label="Select row"
+//       />
+//     ),
+//     enableSorting: false,
+//     enableHiding: false,
+//   },
+//   {
+//     accessorKey: "id",
+//     header: "ID",
+//   },
+//   {
+//     accessorKey: "companyCode",
+//     header: ({ column }) => {
+//       return (
+//         <Button
+//           variant="ghost"
+//           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+//           className="p-0"
+//         >
+//           CompanyCode
+//           <ArrowUpDown className="ml-2 h-4 w-4" />
+//         </Button>
+//       )
+//     },
+//   },
+//   {
+//     accessorKey: "phantasyName",
+//     header: "PhantasyName",
+//     // header: () => <div className="text-right">PhantasyName</div>,
+//     // cell: ({ row }) => {
+//     //   const amount = parseFloat(row.getValue("amount"))
+//     //   const formatted = new Intl.NumberFormat("en-US", {
+//     //     style: "currency",
+//     //     currency: "USD",
+//     //   }).format(amount)
+//     //
+//     //   return <div className="text-right font-medium">{formatted}</div>
+//     // },
+//   },
+//   {
+//     accessorKey: "postalCode",
+//     header: "PostalCode",
+//   },
+//   {
+//     id: "actions",
+//     cell: ({ row }) => {
+//       const company = row.original
+//
+//       const handleDelete = () => {
+//         axios
+//           .delete(`http://localhost:8080/companies/${company.id}`)
+//           .catch((err) => console.error(err))
+//
+//         funcCreateCustomEvent("delete", { id: company.id })
+//       }
+//
+//       const handleAddRelated = () =>
+//         funcCreateCustomEvent("related", { id: company.id })
+//
+//       return (
+//         <DropdownMenu>
+//           <DropdownMenuTrigger asChild>
+//             <Button variant="ghost" className="h-8 w-8 p-0">
+//               <span className="sr-only">Open menu</span>
+//               <MoreHorizontal className="h-4 w-4" />
+//             </Button>
+//           </DropdownMenuTrigger>
+//           <DropdownMenuContent align="end">
+//             <DropdownMenuLabel>Relations</DropdownMenuLabel>
+//             <DropdownMenuItem asChild>
+//               <Link
+//                 href={`/companies/${company.id}/supplies?name=${company.phantasyName}`}
+//               >
+//                 See all related suppliers
+//               </Link>
+//             </DropdownMenuItem>
+//             <DropdownMenuSeparator />
+//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//             <DropdownMenuItem onClick={handleDelete}>
+//               Delete company
+//             </DropdownMenuItem>
+//             <DropdownMenuItem onClick={handleAddRelated}>
+//               Add supplier
+//             </DropdownMenuItem>
+//           </DropdownMenuContent>
+//         </DropdownMenu>
+//       )
+//     },
+//   },
+// ]
