@@ -17,7 +17,7 @@ async function getData(
   related: Type
 ): Promise<Supply[] | Company[]> {
   const res = await fetch(`${backendPath()}/${type}/${id}/${related}`, {
-    next: { revalidate: 0 },
+    cache: "no-store",
   })
 
   if (!res.ok) {

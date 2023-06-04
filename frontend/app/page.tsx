@@ -3,7 +3,7 @@ import { backendPath } from "@/components/helpers/database-path"
 
 async function getData(type: "companies" | "supplies") {
   const res = await fetch(`${backendPath()}/${type}`, {
-    next: { revalidate: 0 },
+    cache: "no-store",
   })
 
   if (!res.ok) {

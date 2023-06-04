@@ -6,57 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="65c563ef-b6fd-4d8c-92a2-d667e172acff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" afterPath="$PROJECT_DIR$/.settings/org.eclipse.buildship.core.prefs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/TestApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/TestApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/controllers/CompanyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/controllers/CompanyController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/controllers/SupplyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/controllers/SupplyController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/entities/CompanyEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/entities/CompanyEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/entities/SupplyEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/entities/SupplyEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/repositories/CompanyRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/repositories/CompanyRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/repositories/SupplyRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/repositories/SupplyRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/services/CompanyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/services/CompanyService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/services/SupplyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/services/SupplyService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/main/com/project/test/services/config/CorsConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/main/com/project/test/services/config/CorsConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/test/com/project/test/TestApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/test/com/project/test/TestApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/TestApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/controllers/CompanyController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/controllers/SupplyController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/entities/CompanyEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/entities/SupplyEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/repositories/CompanyRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/repositories/SupplyRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/services/CompanyService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/services/SupplyService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/project/test/services/config/CorsConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/test/com/project/test/TestApplicationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/test-0.0.1-SNAPSHOT-plain.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/test-0.0.1-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/com.project.test.TestApplicationTests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/com.project.test.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resolvedMainClassName" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-com.project.test.TestApplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/test/controllers/CompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/test/controllers/CompanyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/app/[type]/[id]/[related]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/app/[type]/[id]/[related]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/app/[type]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/app/[type]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/helpers/database-path.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/helpers/database-path.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/helpers/fetcher.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/helpers/fetcher.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/helpers/function-custom-events.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/helpers/function-custom-events.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/helpers/validates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/helpers/validates.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/hooks/event-listener.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/hooks/event-listener.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/hooks/use-is-company.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/hooks/use-is-company.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,11 +46,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

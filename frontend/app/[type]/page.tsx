@@ -13,7 +13,7 @@ interface DemoPageProps {
 
 async function getData(type: Type): Promise<Supply[] | Company[]> {
   const res = await fetch(`${backendPath()}/${type}`, {
-    next: { revalidate: 0 },
+    cache: "no-store",
   })
 
   if (!res.ok) {

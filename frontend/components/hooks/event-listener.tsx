@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react"
 
+/**
+ * A custom hook that creates a custom event and returns a function to dispatch it.
+ * @param eventName - The name of the custom event to create.
+ * @param eventData - The data to include in the custom event.
+ * @returns A function that dispatches the custom event.
+ */
 export function useCustomEvent(eventName: string, eventData: any) {
   const eventRef = useRef<CustomEvent | null>(null)
 
@@ -23,6 +29,14 @@ export function useCustomEvent(eventName: string, eventData: any) {
   return dispatchCustomEvent
 }
 
+/**
+ * Adds a custom event listener to the document and executes a callback function when the event is triggered.
+ *
+ * @param {string} eventName - The name of the custom event to listen for.
+ * @param {(data: any) => void} eventHandler - The callback function to execute when the custom event is triggered. The function should accept a single parameter, which is the data passed with the custom event.
+ *
+ * @returns {void}
+ */
 export function useCustomEventTrigger(
   eventName: string,
   eventHandler: (data: any) => void

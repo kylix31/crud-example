@@ -1,3 +1,8 @@
+/**
+ * Validates a given CPF or CNPJ number.
+ * @param number The CPF or CNPJ number to validate.
+ * @returns A boolean indicating whether the number is valid (true) or not (false).
+ */
 export default function validateCPFCNPJ(number: string): boolean {
   // Remove all non-digit characters from the input
   const cleanedNumber = number.replace(/\D/g, "")
@@ -14,6 +19,11 @@ export default function validateCPFCNPJ(number: string): boolean {
   return false
 }
 
+/**
+ * Validates a given CPF number.
+ * @param cpf The CPF number to validate.
+ * @returns A boolean indicating whether the CPF is valid (true) or not (false).
+ */
 function validateCPF(cpf: string): boolean {
   // Check if all digits are the same
   if (/^(\d)\1{10}$/.test(cpf)) {
@@ -52,6 +62,11 @@ function validateCPF(cpf: string): boolean {
   )
 }
 
+/**
+ * Validates a given CNPJ number.
+ * @param cnpj The CNPJ number to validate.
+ * @returns A boolean indicating whether the CNPJ is valid (true) or not (false).
+ */
 function validateCNPJ(cnpj: string): boolean {
   // Check if all digits are the same
   if (/^(\d)\1{13}$/.test(cnpj)) {
