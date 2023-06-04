@@ -1,4 +1,4 @@
-# Project Name
+# Crud Example
 
 This is a sample project that demonstrates how to build a full-stack web application using Next.js, SWR, Tailwind, Spring Boot, MySQL, Docker, and Docker Compose.
 
