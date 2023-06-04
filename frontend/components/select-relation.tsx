@@ -1,7 +1,9 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -22,30 +24,62 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
+import { Company } from "@/app/[type]/company-columns"
+import { Supply } from "@/app/[type]/supplies-columns"
+
+import { funcTriggerCustomEvent } from "./helpers/function-custom-events"
+
+interface SelectRelationProps<T extends Company[] | Supply[]> {
+  relationData: T
+  dataId: number
+  isLoading: boolean
+  type: "supplies" | "companies"
+}
 
 const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
+  id: z.string({
+    required_error: "Please select a company to save.",
+  }),
 })
 
-export default function SelectReactHookForm() {
+export default function SelectRelation<T extends Company[] | Supply[]>({
+  relationData,
+  isLoading,
+  dataId,
+  type,
+}: SelectRelationProps<T>) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  const { toast } = useToast()
+
+  const isCompanyObj = (data: any): data is Company =>
+    typeof data === "object" && "phantasyName" in data
+
+  const onSubmit = (value: z.infer<typeof FormSchema>) => {
+    const isCompany = type === "companies"
+
+    axios
+      .post(
+        `http://localhost:8080/companies/${
+          isCompany ? dataId : value.id
+        }/supplies/${isCompany ? value.id : dataId}`
+      )
+      .catch(() =>
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        })
+      )
+
+    funcTriggerCustomEvent("toggleSheetRelated")
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -53,25 +87,36 @@ export default function SelectReactHookForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
-          name="email"
+          name="id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel />
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue className="m-4" placeholder="Select a name" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {relationData.map((data) => {
+                    if (isCompanyObj(data)) {
+                      return (
+                        <SelectItem key={data.id} value={data.id.toString()}>
+                          {data.phantasyName}
+                        </SelectItem>
+                      )
+                    }
+
+                    return (
+                      <SelectItem key={data.id} value={data.id.toString()}>
+                        {data.name}
+                      </SelectItem>
+                    )
+                  })}
                 </SelectContent>
               </Select>
               <FormDescription>
-                You can manage email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+                You can select a valid name to add
               </FormDescription>
               <FormMessage />
             </FormItem>

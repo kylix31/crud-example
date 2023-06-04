@@ -19,31 +19,33 @@ import {
 import { Input } from "@/components/ui/input"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import validateCPFCNPJ from "@/components/helpers/validates"
 
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
+import validateCPFCNPJ from "./helpers/validates"
 
-const supplierCodeSchema = z.string().refine((value) => {
+const companyCodeSchema = z.string().refine((value) => {
+  if (value.length < 14) {
+    return false
+  }
+
   const isValid = validateCPFCNPJ(value)
 
   return isValid
 }, "Invalid number")
 
 const formSchema = z.object({
-  name: z.string().min(4).max(20),
-  email: z.string().email(),
-  supplierCode: supplierCodeSchema,
+  companyCode: companyCodeSchema,
+  phantasyName: z.string().min(4),
   postalCode: z.string().min(9).max(9),
 })
 
-export default function SupplierForm() {
+export default function CompanyForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      supplierCode: "",
-      email: "",
+      companyCode: "",
+      phantasyName: "",
       postalCode: "",
     },
   })
@@ -90,7 +92,7 @@ export default function SupplierForm() {
       return
     }
 
-    axios.post("http://localhost:8080/supplies", values).catch((_) =>
+    axios.post("http://localhost:8080/companies", values).catch((_) =>
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -112,19 +114,12 @@ export default function SupplierForm() {
 
     const cleanedValue = value.replace(/\D/g, "")
 
-    if (/^\d{11}$/.test(cleanedValue)) {
-      maskedNumber = cleanedValue.replace(
-        /(\d{3})(\d{3})(\d{3})(\d{0,2})/,
-        (_, group1, group2, group3, group4) =>
-          `${group1}.${group2}.${group3}-${group4}`
-      )
-    } else if (/^\d{14}$/.test(cleanedValue)) {
-      maskedNumber = cleanedValue.replace(
-        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
-        (_, group1, group2, group3, group4, group5) =>
-          `${group1}.${group2}.${group3}/${group4}-${group5}`
-      )
-    }
+    maskedNumber = cleanedValue.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
+      (_, group1, group2, group3, group4, group5) =>
+        `${group1}.${group2}.${group3}/${group4}-${group5}`
+    )
+
     // Set the masked number in your component state or using setState()
     formOnChange(maskedNumber)
   }
@@ -152,7 +147,7 @@ export default function SupplierForm() {
       <form className="mt-5 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="name"
+          name="phantasyName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
@@ -160,7 +155,7 @@ export default function SupplierForm() {
                 <Input type="text" placeholder="John" {...field} />
               </FormControl>
               <FormDescription>
-                This is the main name of a supplier.
+                This is the main name of a company.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -168,26 +163,10 @@ export default function SupplierForm() {
         />
         <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="text" placeholder="john@doe.com" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is the main email of a supplier.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="supplierCode"
+          name="companyCode"
           render={({ field: { onChange, onBlur, value } }) => (
             <FormItem>
-              <FormLabel>CPF/CNPJ</FormLabel>
+              <FormLabel>CNPJ</FormLabel>
               <FormControl>
                 <Input
                   maxLength={18}
@@ -201,7 +180,7 @@ export default function SupplierForm() {
                 />
               </FormControl>
               <FormDescription>
-                This is a main document info of a supplier.
+                This is a main document info of a company.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -226,7 +205,7 @@ export default function SupplierForm() {
                 />
               </FormControl>
               <FormDescription>
-                This is a main CEP of a supplier.
+                This is a main CEP of a company.
               </FormDescription>
               <FormMessage />
             </FormItem>

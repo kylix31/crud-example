@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useToast } from "@/components/ui/use-toast"
 import { funcCreateCustomEvent } from "@/components/helpers/function-custom-events"
 
 // This type is used to define the shape of our data.
@@ -100,6 +101,9 @@ export const suppliesColumns: ColumnDef<Supply>[] = [
         funcCreateCustomEvent("delete", { id: supplier.id })
       }
 
+      const handleAddRelated = () =>
+        funcCreateCustomEvent("related", { id: supplier.id })
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -119,7 +123,9 @@ export const suppliesColumns: ColumnDef<Supply>[] = [
             <DropdownMenuItem onClick={handleDelete}>
               Delete supplier
             </DropdownMenuItem>
-            <DropdownMenuItem>Add company</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleAddRelated}>
+              Add company
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

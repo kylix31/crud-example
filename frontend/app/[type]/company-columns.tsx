@@ -1,6 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import axios from "axios"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { funcCreateCustomEvent } from "@/components/helpers/function-custom-events"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -83,7 +85,18 @@ export const companyColumns: ColumnDef<Company>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const selectedRow = row.original
+      const company = row.original
+
+      const handleDelete = () => {
+        axios
+          .delete(`http://localhost:8080/companies/${company.id}`)
+          .catch((err) => console.error(err))
+
+        funcCreateCustomEvent("delete", { id: company.id })
+      }
+
+      const handleAddRelated = () =>
+        funcCreateCustomEvent("related", { id: company.id })
 
       return (
         <DropdownMenu>
@@ -96,13 +109,17 @@ export const companyColumns: ColumnDef<Company>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(selectedRow.id)}
+              onClick={() => navigator.clipboard.writeText(company.id)}
             >
-              Copy payment ID
+              Copy company ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>
+              Delete company
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleAddRelated}>
+              Add supplier
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

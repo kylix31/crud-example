@@ -40,7 +40,9 @@ import {
 import { fetcher } from "@/components/helpers/fetcher"
 import LoadingSkeleton from "@/components/loading-sekeleton"
 
+import CompanyForm from "./companies-form"
 import { useCustomEventTrigger } from "./hooks/event-listener"
+import SelectRelation from "./select-relation"
 import SupplierForm from "./supplies-form"
 
 interface DataTableProps {
@@ -64,6 +66,8 @@ export function DataTable({
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
   const [shouldOpenSheet, setShouldOpenSheet] = React.useState(false)
+  const [shouldOpenRelated, setShouldOpenRelated] = React.useState(false)
+  const [currentDataId, setCurrentDataId] = React.useState(0)
 
   const { data, mutate, isLoading } = useSWR(
     `http://localhost:8080/${fetch}`,
@@ -77,6 +81,15 @@ export function DataTable({
     `http://localhost:8080/${fetch === "supplies" ? "companies" : "supplies"}`,
     fetcher
   )
+
+  useCustomEventTrigger("related", (event) => {
+    setShouldOpenRelated(true)
+    setCurrentDataId(event.id)
+  })
+
+  useCustomEventTrigger("toggleSheetRelated", () => {
+    setShouldOpenRelated((prev) => !prev)
+  })
 
   useCustomEventTrigger("toggleSheet", () => {
     setShouldOpenSheet((prev) => !prev)
@@ -247,26 +260,34 @@ export function DataTable({
       >
         <SheetContent position="right" size="content">
           <SheetHeader>
-            <SheetTitle>Add supplier</SheetTitle>
+            <SheetTitle>
+              Add {fetch === "supplies" ? "supply" : "company"}
+            </SheetTitle>
             <SheetDescription>
-              Add a new supplier. Click on submit to save.
+              Add a new {fetch === "supplies" ? "supplier" : "company"} . Click
+              on submit to save.
             </SheetDescription>
           </SheetHeader>
-          <SupplierForm />
+          {fetch === "supplies" ? <SupplierForm /> : <CompanyForm />}
         </SheetContent>
       </Sheet>
       <Sheet
-      // open={shouldOpenSheet}
-      // onOpenChange={(bool) => setShouldOpenSheet(bool)}
+        open={shouldOpenRelated}
+        onOpenChange={(bool) => setShouldOpenRelated(bool)}
       >
         <SheetContent position="right" size="content">
           <SheetHeader>
-            <SheetTitle>Add supplier</SheetTitle>
+            <SheetTitle>Add relation for the supply</SheetTitle>
             <SheetDescription>
               Add a new supplier. Click on submit to save.
             </SheetDescription>
           </SheetHeader>
-          <SupplierForm />
+          <SelectRelation
+            dataId={currentDataId}
+            relationData={relationData}
+            isLoading={relationIsLoading}
+            type={fetch}
+          />
         </SheetContent>
       </Sheet>
     </div>
