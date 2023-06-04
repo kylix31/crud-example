@@ -1,18 +1,6 @@
 version: "3.7"
 services:
   frontend:
-    # build:
-    #   context: ./frontend
-    #   dockerfile: Dockerfile
-    # ports:
-    #   - 3000:3000
-    # volumes:
-    #   - ./frontend:/app
-    #   - ./frontend/node_modules
-    # depends_on:
-    #   - backend
-    # environment:
-    #   - BACKEND_URL=http://backend:8080 container_name: next-app
     build:
       context: ./frontend
       dockerfile: Dockerfile
