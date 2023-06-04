@@ -23,23 +23,27 @@ import validateCPFCNPJ from "@/components/helpers/validates"
 
 import { backendPath } from "./helpers/database-path"
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
+import { Checkbox } from "./ui/checkbox"
 
 type UpdataDataProps = Record<string, any>
 
-const supplierCodeSchema = z.string().refine((value) => {
-  const isValid = validateCPFCNPJ(value)
-
-  return isValid
-}, "Invalid number")
-
-const formSchema = z.object({
-  name: z.string().min(4).max(20),
-  email: z.string().email(),
-  supplierCode: supplierCodeSchema,
-  postalCode: z.string().min(9).max(9),
-})
-
 export default function SupplierForm({ updateData }: UpdataDataProps) {
+  const [isFromParana, setIsFromParana] = React.useState(false)
+  const [isLegalAge, setIsLegalAge] = React.useState(false)
+
+  const supplierCodeSchema = z.string().refine((value) => {
+    const isValid = validateCPFCNPJ(value)
+
+    return isValid
+  }, "Invalid number")
+
+  const formSchema = z.object({
+    name: z.string().min(4).max(20),
+    email: z.string().email(),
+    supplierCode: supplierCodeSchema,
+    postalCode: z.string().length(9),
+  })
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,6 +93,12 @@ export default function SupplierForm({ updateData }: UpdataDataProps) {
         title: "Oooopss... Invalid CEP",
         description: "Please, put some valid CEP",
       })
+
+      return
+    }
+
+    if (response.data.uf === "PR" && !isLegalAge) {
+      setIsFromParana(true)
 
       return
     }
@@ -247,6 +257,25 @@ export default function SupplierForm({ updateData }: UpdataDataProps) {
             </FormItem>
           )}
         />
+        {isFromParana && (
+          <div className="items-top flex space-x-2">
+            <Checkbox
+              id="terms1"
+              onCheckedChange={(checked: boolean) => setIsLegalAge(checked)}
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="terms1"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Are you a legal age?
+              </label>
+              <p className="text-muted-foreground text-sm">
+                You must accept this condition
+              </p>
+            </div>
+          </div>
+        )}
         <Button className="mt-5 w-full" type="submit">
           Submit
         </Button>

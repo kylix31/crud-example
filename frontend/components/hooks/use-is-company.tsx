@@ -15,5 +15,10 @@ export function useIsCompany(): boolean {
     throw new TypeError("useParams returned null or undefined.")
   }
 
-  return React.useMemo(() => params.type === "companies", [params.type])
+  return React.useMemo(
+    () =>
+      (params.type === "companies" && params.related !== "supplies") ||
+      params.related === "company",
+    [params.related, params.type]
+  )
 }

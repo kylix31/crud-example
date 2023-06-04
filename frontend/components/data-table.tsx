@@ -178,16 +178,39 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
         </h1>
       )}
 
-      {}
-      <div className="flex items-center py-4">
-        <Input
-          placeholder={filterName}
-          value={(table.getColumn(filterBy)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(filterBy)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className=" flex items-center py-4">
+        <div className="flex w-2/3 flex-wrap gap-3 md:flex-nowrap">
+          <Input
+            placeholder={
+              isCompany ? "Filter by phantasy name" : "Filter by name"
+            }
+            value={
+              (table
+                .getColumn(isCompany ? "phantasyName" : "name")
+                ?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table
+                .getColumn(isCompany ? "phantasyName" : "name")
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Input
+            placeholder={isCompany ? "Filter by CNPJ" : "Filter by CPF/CNPJ"}
+            value={
+              (table
+                .getColumn(isCompany ? "companyCode" : "supplierCode")
+                ?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table
+                .getColumn(isCompany ? "companyCode" : "supplierCode")
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
