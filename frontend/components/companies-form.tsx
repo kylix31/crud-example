@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
+import { backendPath } from "./helpers/database-path"
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
 import validateCPFCNPJ from "./helpers/validates"
 
@@ -92,7 +93,7 @@ export default function CompanyForm() {
       return
     }
 
-    await axios.post("http://localhost:8080/companies", values).catch((_) =>
+    await axios.post(`${backendPath()}/companies`, values).catch((_) =>
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

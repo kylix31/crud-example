@@ -1,4 +1,5 @@
 import { DataTable } from "@/components/data-table"
+import { backendPath } from "@/components/helpers/database-path"
 import { WithSWR } from "@/components/with-swr"
 
 import { Company, companyColumns } from "./company-columns"
@@ -11,7 +12,7 @@ interface DemoPageProps {
 }
 
 async function getData(type: Type): Promise<Supply[] | Company[]> {
-  const res = await fetch(`http://localhost:8080/${type}`, {
+  const res = await fetch(`${backendPath()}/${type}`, {
     next: { revalidate: 0 },
   })
 

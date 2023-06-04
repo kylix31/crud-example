@@ -2,12 +2,12 @@
 
 import { SWRConfig } from "swr"
 
-import { Company } from "@/app/companies/columns"
-import { Supplies } from "@/app/supplies/columns"
+import { Company } from "@/app/[type]/company-columns"
+import { Supply } from "@/app/[type]/supplies-columns"
 
 interface WithSWRPRops {
   children: React.ReactNode
-  data: Company[] | Supplies[]
+  data: Company[] | Supply[]
 }
 
 export function WithSWR({ children, data }: WithSWRPRops) {

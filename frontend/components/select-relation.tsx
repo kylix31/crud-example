@@ -27,6 +27,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Company } from "@/app/[type]/company-columns"
 import { Supply } from "@/app/[type]/supplies-columns"
 
+import { backendPath } from "./helpers/database-path"
 import { funcTriggerCustomEvent } from "./helpers/function-custom-events"
 import { useIsCompany } from "./hooks/use-is-company"
 
@@ -61,9 +62,9 @@ export default function SelectRelation<T extends Company[] | Supply[]>({
   const onSubmit = (value: z.infer<typeof FormSchema>) => {
     axios
       .post(
-        `http://localhost:8080/companies/${
-          isCompany ? dataId : value.id
-        }/supplies/${isCompany ? value.id : dataId}`
+        `${backendPath()}/companies/${isCompany ? dataId : value.id}/supplies/${
+          isCompany ? value.id : dataId
+        }`
       )
       .catch(() =>
         toast({

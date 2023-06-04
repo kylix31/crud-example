@@ -21,6 +21,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import validateCPFCNPJ from "@/components/helpers/validates"
 
+import { backendPath } from "./helpers/database-path"
 import { funcCreateCustomEvent } from "./helpers/function-custom-events"
 
 const supplierCodeSchema = z.string().refine((value) => {
@@ -90,7 +91,7 @@ export default function SupplierForm() {
       return
     }
 
-    axios.post("http://localhost:8080/supplies", values).catch((_) =>
+    axios.post(`${backendPath()}/supplies`, values).catch((_) =>
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

@@ -1,4 +1,5 @@
 import { DataTable } from "@/components/data-table"
+import { backendPath } from "@/components/helpers/database-path"
 import { WithSWR } from "@/components/with-swr"
 
 import { Company, companyColumns } from "../../company-columns"
@@ -15,7 +16,7 @@ async function getData(
   id: number,
   related: Type
 ): Promise<Supply[] | Company[]> {
-  const res = await fetch(`http://localhost:8080/${type}/${id}/${related}`, {
+  const res = await fetch(`${backendPath()}/${type}/${id}/${related}`, {
     next: { revalidate: 0 },
   })
 

@@ -45,6 +45,7 @@ import { companyColumns } from "@/app/[type]/company-columns"
 import { Supply, suppliesColumns } from "@/app/[type]/supplies-columns"
 
 import CompanyForm from "./companies-form"
+import { backendPath } from "./helpers/database-path"
 import { useCustomEventTrigger } from "./hooks/event-listener"
 import { useIsCompany } from "./hooks/use-is-company"
 import SelectRelation from "./select-relation"
@@ -74,6 +75,9 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
     () => searchParams.get("name"),
     [searchParams]
   )
+
+  const defaultPath = backendPath()
+
   const columns = React.useMemo(() => {
     if (params.related && params.type === "companies") {
       return suppliesColumns(params?.id, params?.type, params?.related)
@@ -92,18 +96,15 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
 
   const { data, mutate, isLoading } = useSWR(
     params.related
-      ? `http://localhost:8080/${params.type}/${params.id}/${params.related}`
-      : `http://localhost:8080/${params.type}`,
+      ? `${defaultPath}/${params.type}/${params.id}/${params.related}`
+      : `${defaultPath}/${params.type}`,
     fetcher
   )
   const {
     data: relationData,
     // mutate: relationMutate,
     isLoading: relationIsLoading,
-  } = useSWR(
-    `http://localhost:8080/${isCompany ? "supplies" : "companies"}`,
-    fetcher
-  )
+  } = useSWR(`${defaultPath}/${isCompany ? "supplies" : "companies"}`, fetcher)
 
   useCustomEventTrigger("related", (event) => {
     setShouldOpenRelated(true)
