@@ -170,9 +170,15 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
 
   return (
     <div>
-      {params.related && (
+      {params.related ? (
         <h1 className="text-xl font-bold uppercase">{`${currentParamsName} ${params.type} related to ${params.related}`}</h1>
+      ) : (
+        <h1 className="text-xl font-bold uppercase">
+          {isCompany ? "add your company" : "add your supplier"}
+        </h1>
       )}
+
+      {}
       <div className="flex items-center py-4">
         <Input
           placeholder={filterName}

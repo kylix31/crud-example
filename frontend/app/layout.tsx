@@ -38,15 +38,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "bg-background min-h-screen font-sans antialiased",
             fontSans.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SiteProvider>
-              <div className="relative flex min-h-screen flex-col">
+              <div className="relative flex min-h-screen flex-col overflow-x-hidden">
                 <SiteHeader />
-                <div className="flex flex-1">{children}</div>
+                <div className="flex flex-1 overflow-x-hidden">{children}</div>
               </div>
               <Toaster />
               <TailwindIndicator />
