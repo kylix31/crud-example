@@ -44,10 +44,13 @@ const formSchema = z.object({
 
 export default function CompanyForm({ updateData }: UpdataDataProps) {
   // 1. Define your form.
+  //
+
+  console.log(updateData)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyCode: updateData.companyCode ?? "",
+      companyCode: updateData.CompanyCode ?? "",
       phantasyName: updateData.phantasyName ?? "",
       postalCode: updateData.postalCode ?? "",
     },
