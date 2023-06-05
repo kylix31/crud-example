@@ -50,6 +50,7 @@ import { useCustomEventTrigger } from "./hooks/event-listener"
 import { useIsCompany } from "./hooks/use-is-company"
 import SelectRelation from "./select-relation"
 import SupplierForm from "./supplies-form"
+import { useToast } from "./ui/use-toast"
 
 interface DataTableProps {
   filterName: string
@@ -76,6 +77,8 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
     () => searchParams.get("name"),
     [searchParams]
   )
+
+  const { toast } = useToast()
 
   const defaultPath = backendPath()
 
@@ -132,6 +135,14 @@ export function DataTable({ filterName, filterBy }: DataTableProps) {
       // populateCache: true,
       // revalidate: false,
     }).catch((e) => console.error(e))
+  })
+
+  useCustomEventTrigger("relativeError", () => {
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "Did you removed the relative ones?",
+    })
   })
 
   useCustomEventTrigger("delete", (event) => {

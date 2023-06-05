@@ -15,9 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useToast } from "@/components/ui/use-toast"
+import { toast, useToast } from "@/components/ui/use-toast"
 import { backendPath } from "@/components/helpers/database-path"
-import { funcCreateCustomEvent } from "@/components/helpers/function-custom-events"
+import {
+  funcCreateCustomEvent,
+  funcTriggerCustomEvent,
+} from "@/components/helpers/function-custom-events"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -111,7 +114,7 @@ export function suppliesColumns(
                 ? `${defaultPath}/companies/${id}/supplies/${currentRow.id}`
                 : `${defaultPath}/supplies/${currentRow.id}`
             )
-            .catch((err) => console.error(err))
+            .catch(() => funcTriggerCustomEvent("relativeError"))
 
           funcCreateCustomEvent("delete", { id: currentRow.id })
         }
